@@ -679,6 +679,13 @@ export default function GradeCalculatorSite() {
       savedAt: Date.now(),
     };
 
+    // Save calculator state so it can be restored after Stripe checkout
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState));
+
+    // Redirect to Stripe payment link
+    window.location.href = SAMPLE_PAYMENT_LINK;
+  };
+
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState));
     setShowPaywall(false);
     setCurrentView("results");
