@@ -37,7 +37,7 @@ const SelectItem = ({ value, children }) => <option value={value}>{children}</op
 const SelectTrigger = ({ children }) => <>{children}</>;
 const SelectValue = () => null;
 
-const SAMPLE_PAYMENT_LINK = "https://buy.stripe.com/test_3cIcN7645fgEf9E2i2djO00";
+const SAMPLE_PAYMENT_LINK = "https://buy.stripe.com/4gMfZjezL4qx5Td3wu4ko00";
 const STORAGE_KEY = "gpa_calculator_checkout_state";
 
 const COURSE_SUGGESTIONS = [
