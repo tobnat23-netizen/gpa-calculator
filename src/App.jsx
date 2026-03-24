@@ -13,7 +13,6 @@ import {
   Trash2,
 } from "lucide-react";
 
-// Simple replacements for UI components so the project works without shadcn/ui
 const Card = ({ children, className = "" }) => <div className={className}>{children}</div>;
 const CardHeader = ({ children, className = "" }) => <div className={className}>{children}</div>;
 const CardContent = ({ children, className = "" }) => <div className={className}>{children}</div>;
@@ -23,7 +22,7 @@ const CardDescription = ({ children, className = "" }) => <div className={classN
 const Button = ({ children, className = "", ...props }) => (
   <button
     className={
-      "inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 text-white rounded-xl transition disabled:cursor-not-allowed disabled:opacity-60 " +
+      "inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 text-white rounded-xl transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 " +
       className
     }
     {...props}
@@ -374,14 +373,14 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button
                 onClick={onDownloadPdf}
-                className="rounded-2xl bg-white !text-slate-900 hover:bg-slate-100"
+                className="rounded-2xl bg-white !text-slate-900 hover:bg-slate-100 hover:-translate-y-0.5"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download PDF report
               </Button>
               <Button
                 onClick={onBack}
-                className="rounded-2xl border border-white/15 bg-white/10 text-white hover:bg-white/15"
+                className="rounded-2xl border border-white/15 bg-white/10 text-white hover:bg-white/15 hover:-translate-y-0.5"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to calculator
@@ -571,7 +570,7 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
 }
 
 export default function GradeCalculatorSite() {
-  const [courses, setCourses] = useState([{ id: 1, name: "", credits: "3", score: "" }]);
+  const [courses, setCourses] = useState([{ id: 1, name: "English", credits: "3", score: "92" }]);
   const [nextId, setNextId] = useState(2);
   const [schoolMode, setSchoolMode] = useState("college");
   const [showPaywall, setShowPaywall] = useState(false);
@@ -669,7 +668,7 @@ export default function GradeCalculatorSite() {
     setTimeout(() => {
       setIsCalculating(false);
       setShowPaywall(true);
-    }, 1500);
+    }, 900);
   }
 
   function handleUnlockResults() {
@@ -681,7 +680,8 @@ export default function GradeCalculatorSite() {
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState));
-    window.location.href = SAMPLE_PAYMENT_LINK;
+    setShowPaywall(false);
+    setCurrentView("results");
   }
 
   function handleBackToCalculator() {
@@ -785,7 +785,7 @@ export default function GradeCalculatorSite() {
             </div>
           </Card>
 
-          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
             <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
               <CardHeader className="p-5 sm:p-6">
                 <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
@@ -823,9 +823,9 @@ export default function GradeCalculatorSite() {
                   {courses.map((course) => (
                     <div
                       key={course.id}
-                      className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 md:grid-cols-2 xl:grid-cols-[1.5fr_0.6fr_0.6fr_auto] xl:items-end"
+                      className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 md:grid-cols-[1.5fr_0.6fr_0.6fr_auto] md:items-end"
                     >
-                      <div className="md:col-span-2 xl:col-span-1">
+                      <div>
                         <Label>Course name</Label>
                         <CourseAutocomplete
                           inputId={`course-name-${course.id}`}
@@ -855,7 +855,7 @@ export default function GradeCalculatorSite() {
                       </div>
 
                       <Button
-                        className="h-[46px] rounded-xl xl:w-[46px] xl:px-0"
+                        className="h-[46px] rounded-xl md:w-[46px] md:px-0"
                         onClick={() => removeCourse(course.id)}
                         disabled={courses.length === 1}
                       >
@@ -908,10 +908,25 @@ export default function GradeCalculatorSite() {
 
                 {showPaywall && (
                   <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-lg">
-                    <div className="text-lg font-semibold text-slate-900">Unlock your results</div>
+                    <div className="text-lg font-semibold text-slate-900">Get your exact GPA</div>
                     <div className="mt-2 text-sm leading-6 text-slate-600">
-                      To see your weighted GPA, final average percentage, and letter grade, you need to complete a one-time $0.99 payment.
+                      Unlock your exact weighted GPA, final letter grade, and downloadable PDF report with a one-time payment.
                     </div>
+
+                    <div className="mt-4 grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                      <div>• Exact weighted GPA</div>
+                      <div>• Final letter grade</div>
+                      <div>• Downloadable PDF report</div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                      Your average percentage is already calculated from your inputs. Pay only to unlock the exact GPA, final letter grade, and PDF export.
+                    </div>
+
+                    <div className="mt-4 text-xs leading-5 text-slate-500">
+                      Secure checkout with Stripe • One-time payment • No subscription
+                    </div>
+
                     <div className="mt-3 text-xs leading-5 text-slate-500">
                       By continuing, users accept the{" "}
                       <a href={legalLinks.terms} className="underline">
@@ -923,9 +938,10 @@ export default function GradeCalculatorSite() {
                       </a>
                       .
                     </div>
+
                     <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                       <Button className="rounded-2xl" onClick={handleUnlockResults}>
-                        Unlock my GPA for $0.99
+                        Get exact GPA + PDF for $0.99
                       </Button>
                     </div>
                   </div>
@@ -933,7 +949,7 @@ export default function GradeCalculatorSite() {
               </CardContent>
             </Card>
 
-            <div className="grid gap-5 xl:sticky xl:top-6">
+            <div className="grid gap-5 lg:sticky lg:top-6">
               <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
                 <CardHeader className="p-5 sm:p-6">
                   <CardTitle className="text-lg font-semibold text-slate-900 sm:text-xl">
@@ -946,14 +962,14 @@ export default function GradeCalculatorSite() {
 
                 <CardContent className="space-y-4 px-5 pb-5 sm:px-6 sm:pb-6">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    Your weighted GPA, percentage average, and letter grade update instantly from your inputs.
+                    Your average percentage updates instantly from your inputs. Unlock the exact GPA, final letter grade, and PDF report after checkout.
                   </div>
 
                   <ResultCard title="Weighted GPA" value={totals.gpa} locked subtext="Based on a 4.0 GPA scale" />
                   <ResultCard
                     title="Average Percentage"
                     value={`${totals.averagePercent}%`}
-                    locked
+                    locked={false}
                     subtext="Credit-weighted class average"
                   />
                   <ResultCard
@@ -965,6 +981,7 @@ export default function GradeCalculatorSite() {
                 </CardContent>
               </Card>
 
+              <div className="grid gap-5 lg:grid-cols-2 lg:col-span-2">
               <Card id="terms-of-service" className="rounded-3xl border-0 shadow-lg">
                 <CardHeader className="p-5 sm:p-6">
                   <CardTitle>Terms of Service</CardTitle>
@@ -999,6 +1016,7 @@ export default function GradeCalculatorSite() {
                   <p>This Privacy Policy may be updated from time to time. Continued use of the website means you accept any updated policy terms.</p>
                 </CardContent>
               </Card>
+            </div>
             </div>
           </div>
         </motion.div>
