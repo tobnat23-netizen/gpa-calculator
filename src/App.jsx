@@ -1,30 +1,52 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calculator, Download, FileText, GraduationCap, Info, Lock, Plus, Search, Sparkles, Trash2 } from "lucide-react";
-// Simple replacements for UI components so the project works without shadcn/ui
-const Card = ({ children, className="" }) => <div className={className}>{children}</div>;
-const CardHeader = ({ children, className="" }) => <div className={className}>{children}</div>;
-const CardContent = ({ children, className="" }) => <div className={className}>{children}</div>;
-const CardTitle = ({ children, className="" }) => <div className={className}>{children}</div>;
-const CardDescription = ({ children, className="" }) => <div className={className}>{children}</div>;
+import {
+  ArrowLeft,
+  Calculator,
+  Download,
+  FileText,
+  GraduationCap,
+  Lock,
+  Plus,
+  Search,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 
-const Button = ({ children, className="", ...props }) => (
-  <button className={"px-4 py-2 bg-slate-900 text-white rounded-xl " + className} {...props}>
+// Simple replacements for UI components so the project works without shadcn/ui
+const Card = ({ children, className = "" }) => <div className={className}>{children}</div>;
+const CardHeader = ({ children, className = "" }) => <div className={className}>{children}</div>;
+const CardContent = ({ children, className = "" }) => <div className={className}>{children}</div>;
+const CardTitle = ({ children, className = "" }) => <div className={className}>{children}</div>;
+const CardDescription = ({ children, className = "" }) => <div className={className}>{children}</div>;
+
+const Button = ({ children, className = "", ...props }) => (
+  <button
+    className={
+      "inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 text-white rounded-xl transition disabled:cursor-not-allowed disabled:opacity-60 " +
+      className
+    }
+    {...props}
+  >
     {children}
   </button>
 );
 
-const Input = ({ className="", ...props }) => (
-  <input className={"border border-slate-300 px-3 py-2 rounded-xl w-full " + className} {...props} />
+const Input = ({ className = "", ...props }) => (
+  <input
+    className={
+      "border border-slate-300 px-3 py-2.5 rounded-xl w-full bg-white outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200 " +
+      className
+    }
+    {...props}
+  />
 );
 
-const Label = ({ children }) => (
-  <label className="text-sm font-medium text-slate-700">{children}</label>
-);
+const Label = ({ children }) => <label className="text-sm font-medium text-slate-700">{children}</label>;
 
 const Select = ({ value, onValueChange, children }) => (
   <select
-    className="border border-slate-300 px-3 py-2 rounded-xl w-full mt-2"
+    className="border border-slate-300 px-3 py-2.5 rounded-xl w-full mt-2 bg-white outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
     value={value}
     onChange={(e) => onValueChange(e.target.value)}
   >
@@ -131,16 +153,16 @@ function numberOrZero(value) {
 
 function ResultCard({ title, value, locked = false, subtext = "" }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <div className={locked ? "select-none blur-md" : ""}>
         <div className="text-sm text-slate-500">{title}</div>
-        <div className="mt-2 text-3xl font-bold text-slate-900">{value}</div>
+        <div className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">{value}</div>
         {subtext ? <div className="mt-2 text-sm text-slate-500">{subtext}</div> : null}
       </div>
       {locked && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/70 backdrop-blur-sm">
           <Lock className="h-6 w-6 text-slate-700" />
-          <div className="text-sm font-medium text-slate-700">Unlock to see your result</div>
+          <div className="text-center text-sm font-medium text-slate-700">Unlock to see your result</div>
         </div>
       )}
     </div>
@@ -157,9 +179,7 @@ function Mascot({ visible }) {
     >
       <span className="text-3xl">🎓</span>
       <span className="text-2xl">🤔</span>
-      <div className="text-sm text-slate-600">
-        Thinking about your GPA...
-      </div>
+      <div className="text-sm text-slate-600">Thinking about your GPA...</div>
     </motion.div>
   );
 }
@@ -189,7 +209,7 @@ function CourseAutocomplete({ value, onChange, inputId }) {
           onBlur={() => {
             window.setTimeout(() => setIsOpen(false), 120);
           }}
-          className="mt-2 rounded-xl bg-white pl-9"
+          className="mt-2 pl-9"
         />
       </div>
 
@@ -326,90 +346,222 @@ function downloadReportPdf({ totals, courses, schoolMode }) {
 
 function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
   const courseSummary = buildCourseSummary(courses);
-  const highestCourse = courseSummary.length ? [...courseSummary].sort((a, b) => b.numericScore - a.numericScore)[0] : null;
-  const lowestCourse = courseSummary.length ? [...courseSummary].sort((a, b) => a.numericScore - b.numericScore)[0] : null;
+  const highestCourse = courseSummary.length
+    ? [...courseSummary].sort((a, b) => b.numericScore - a.numericScore)[0]
+    : null;
+  const lowestCourse = courseSummary.length
+    ? [...courseSummary].sort((a, b) => a.numericScore - b.numericScore)[0]
+    : null;
 
   return (
-    <div className="grid gap-6">
-      <Card className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur">
-        <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white md:p-10">
-          <div className="absolute right-6 top-6 hidden rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 md:block">Payment confirmed</div>
+    <div className="grid gap-5 sm:gap-6">
+      <Card className="overflow-hidden rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur sm:rounded-[2rem]">
+        <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6 text-white sm:p-8 lg:p-10">
+          <div className="absolute right-6 top-6 hidden rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 lg:block">
+            Payment confirmed
+          </div>
           <div className="max-w-3xl">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm font-medium text-white/90"><Sparkles className="h-4 w-4" />GPA Results</div>
-            <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Your academic summary is ready.</h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 md:text-lg">Here is your finished GPA report with your weighted GPA, class average, detailed course breakdown, and printable PDF export.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button onClick={onDownloadPdf} className="rounded-2xl bg-white !text-slate-900 hover:bg-slate-100"><Download className="mr-2 h-4 w-4" />Download PDF report</Button>
-              <Button onClick={onBack} className="rounded-2xl border border-white/15 bg-white/10 text-white hover:bg-white/15"><ArrowLeft className="mr-2 h-4 w-4" />Back to calculator</Button>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm font-medium text-white/90">
+              <Sparkles className="h-4 w-4" />
+              GPA Results
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              Your academic summary is ready.
+            </h1>
+            <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7 lg:text-lg">
+              Here is your finished GPA report with your weighted GPA, class average, detailed course breakdown, and printable PDF export.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button
+                onClick={onDownloadPdf}
+                className="rounded-2xl bg-white !text-slate-900 hover:bg-slate-100"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF report
+              </Button>
+              <Button
+                onClick={onBack}
+                className="rounded-2xl border border-white/15 bg-white/10 text-white hover:bg-white/15"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to calculator
+              </Button>
             </div>
           </div>
         </div>
       </Card>
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="grid gap-6">
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 p-6 shadow-xl backdrop-blur"><div className="text-sm text-slate-500">Weighted GPA</div><div className="mt-2 text-4xl font-bold text-slate-900">{totals.gpa}</div><div className="mt-2 text-sm text-slate-500">Based on a 4.0 GPA scale</div></Card>
-            <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 p-6 shadow-xl backdrop-blur"><div className="text-sm text-slate-500">Average Percentage</div><div className="mt-2 text-4xl font-bold text-slate-900">{totals.averagePercent}%</div><div className="mt-2 text-sm text-slate-500">Credit-weighted course average</div></Card>
-            <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 p-6 shadow-xl backdrop-blur"><div className="text-sm text-slate-500">Final Letter Grade</div><div className="mt-2 text-4xl font-bold text-slate-900">{totals.letterGrade}</div><div className="mt-2 text-sm text-slate-500">Estimated from your weighted average</div></Card>
+
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_360px] xl:items-start">
+        <div className="grid gap-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur">
+              <div className="text-sm text-slate-500">Weighted GPA</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">{totals.gpa}</div>
+              <div className="mt-2 text-sm text-slate-500">Based on a 4.0 GPA scale</div>
+            </Card>
+
+            <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur">
+              <div className="text-sm text-slate-500">Average Percentage</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+                {totals.averagePercent}%
+              </div>
+              <div className="mt-2 text-sm text-slate-500">Credit-weighted course average</div>
+            </Card>
+
+            <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur sm:col-span-2 lg:col-span-1">
+              <div className="text-sm text-slate-500">Final Letter Grade</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">{totals.letterGrade}</div>
+              <div className="mt-2 text-sm text-slate-500">Estimated from your weighted average</div>
+            </Card>
           </div>
-          <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold text-slate-900">Course breakdown</CardTitle>
-              <CardDescription>Every course included in your GPA estimate and PDF report.</CardDescription>
+
+          <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
+            <CardHeader className="p-5 sm:p-6">
+              <CardTitle className="text-xl font-semibold text-slate-900 sm:text-2xl">
+                Course breakdown
+              </CardTitle>
+              <CardDescription>
+                Every course included in your GPA estimate and PDF report.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="overflow-hidden rounded-2xl border border-slate-200">
-                <div className="grid grid-cols-6 gap-2 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600"><div className="col-span-2">Course</div><div>Credits</div><div>Grade</div><div>Letter</div><div>Points</div></div>
-                <div className="divide-y divide-slate-200 bg-white">
-                  {courseSummary.length === 0 ? <div className="px-4 py-6 text-sm text-slate-500">Add at least one course to generate a full report.</div> : courseSummary.map((course) => (
-                    <div key={course.id} className="grid grid-cols-6 gap-2 px-4 py-4 text-sm text-slate-700">
-                      <div className="col-span-2 font-medium text-slate-900">{course.name}</div>
-                      <div>{course.credits}</div>
-                      <div>{course.numericScore.toFixed(2)}%</div>
-                      <div>{course.letter}</div>
-                      <div>{course.points.toFixed(1)}</div>
-                    </div>
-                  ))}
+
+            <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
+              <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                <div className="min-w-[640px]">
+                  <div className="grid grid-cols-6 gap-2 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+                    <div className="col-span-2">Course</div>
+                    <div>Credits</div>
+                    <div>Grade</div>
+                    <div>Letter</div>
+                    <div>Points</div>
+                  </div>
+
+                  <div className="divide-y divide-slate-200 bg-white">
+                    {courseSummary.length === 0 ? (
+                      <div className="px-4 py-6 text-sm text-slate-500">
+                        Add at least one course to generate a full report.
+                      </div>
+                    ) : (
+                      courseSummary.map((course) => (
+                        <div key={course.id} className="grid grid-cols-6 gap-2 px-4 py-4 text-sm text-slate-700">
+                          <div className="col-span-2 font-medium text-slate-900">{course.name}</div>
+                          <div>{course.credits}</div>
+                          <div>{course.numericScore.toFixed(2)}%</div>
+                          <div>{course.letter}</div>
+                          <div>{course.points.toFixed(1)}</div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-        <div className="grid gap-6">
-          <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl font-semibold text-slate-900"><FileText className="h-5 w-5" />Downloadable PDF report</CardTitle>
-              <CardDescription>A print-friendly finished report styled to match the calculator.</CardDescription>
+
+        <div className="grid gap-5 xl:sticky xl:top-6">
+          <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
+            <CardHeader className="p-5 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-slate-900 sm:text-xl">
+                <FileText className="h-5 w-5" />
+                Downloadable PDF report
+              </CardTitle>
+              <CardDescription>
+                A print-friendly finished report styled to match the calculator.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+
+            <CardContent className="space-y-4 px-5 pb-5 sm:px-6 sm:pb-6">
               <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-50">
                 <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-5 text-white">
-                  <div className="inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">GPA Report</div>
-                  <div className="mt-3 text-2xl font-bold">Your academic summary</div>
+                  <div className="inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
+                    GPA Report
+                  </div>
+                  <div className="mt-3 text-xl font-bold sm:text-2xl">Your academic summary</div>
                   <div className="mt-2 text-sm text-slate-300">Generated on {formatToday()}</div>
                 </div>
-                <div className="grid gap-3 p-5">
+
+                <div className="grid gap-3 p-4 sm:p-5">
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4"><div className="text-xs text-slate-500">GPA</div><div className="mt-1 text-2xl font-bold text-slate-900">{totals.gpa}</div></div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4"><div className="text-xs text-slate-500">Average</div><div className="mt-1 text-2xl font-bold text-slate-900">{totals.averagePercent}%</div></div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4"><div className="text-xs text-slate-500">Letter</div><div className="mt-1 text-2xl font-bold text-slate-900">{totals.letterGrade}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+                      <div className="text-xs text-slate-500">GPA</div>
+                      <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">{totals.gpa}</div>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+                      <div className="text-xs text-slate-500">Average</div>
+                      <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                        {totals.averagePercent}%
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+                      <div className="text-xs text-slate-500">Letter</div>
+                      <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                        {totals.letterGrade}
+                      </div>
+                    </div>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4"><div className="text-xs font-medium uppercase tracking-wide text-slate-500">Included in the PDF</div><div className="mt-3 space-y-2 text-sm text-slate-600"><div>• Finished GPA summary page</div><div>• Full course breakdown table</div><div>• Report notes and method used</div></div></div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                      Included in the PDF
+                    </div>
+                    <div className="mt-3 space-y-2 text-sm text-slate-600">
+                      <div>• Finished GPA summary page</div>
+                      <div>• Full course breakdown table</div>
+                      <div>• Report notes and method used</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <Button onClick={onDownloadPdf} className="w-full rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800"><Download className="mr-2 h-4 w-4" />Download PDF report</Button>
+
+              <Button
+                onClick={onDownloadPdf}
+                className="w-full rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/15 hover:-translate-y-0.5 hover:bg-slate-800"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF report
+              </Button>
             </CardContent>
           </Card>
-          <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-slate-900">Summary insights</CardTitle>
-              <CardDescription>Helpful context to make the result page feel complete and premium.</CardDescription>
+
+          <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
+            <CardHeader className="p-5 sm:p-6">
+              <CardTitle className="text-lg font-semibold text-slate-900 sm:text-xl">
+                Summary insights
+              </CardTitle>
+              <CardDescription>
+                Helpful context to make the result page feel complete and premium.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm text-slate-600">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="font-medium text-slate-900">School system</div><div className="mt-1">{schoolMode === "highschool" ? "High School" : "College"}</div></div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="font-medium text-slate-900">Total credits counted</div><div className="mt-1">{totals.totalCredits}</div></div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="font-medium text-slate-900">Highest course result</div><div className="mt-1">{highestCourse ? `${highestCourse.name} — ${highestCourse.numericScore.toFixed(2)}%` : "Not available yet"}</div></div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="font-medium text-slate-900">Lowest course result</div><div className="mt-1">{lowestCourse ? `${lowestCourse.name} — ${lowestCourse.numericScore.toFixed(2)}%` : "Not available yet"}</div></div>
+
+            <CardContent className="space-y-4 px-5 pb-5 text-sm text-slate-600 sm:px-6 sm:pb-6">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="font-medium text-slate-900">School system</div>
+                <div className="mt-1">{schoolMode === "highschool" ? "High School" : "College"}</div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="font-medium text-slate-900">Total credits counted</div>
+                <div className="mt-1">{totals.totalCredits}</div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="font-medium text-slate-900">Highest course result</div>
+                <div className="mt-1">
+                  {highestCourse
+                    ? `${highestCourse.name} — ${highestCourse.numericScore.toFixed(2)}%`
+                    : "Not available yet"}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="font-medium text-slate-900">Lowest course result</div>
+                <div className="mt-1">
+                  {lowestCourse
+                    ? `${lowestCourse.name} — ${lowestCourse.numericScore.toFixed(2)}%`
+                    : "Not available yet"}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -419,22 +571,21 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
 }
 
 export default function GradeCalculatorSite() {
-  const [courses, setCourses] = useState([
-    { id: 1, name: "", credits: "3", score: "" },
-  ]);
+  const [courses, setCourses] = useState([{ id: 1, name: "", credits: "3", score: "" }]);
   const [nextId, setNextId] = useState(2);
   const [schoolMode, setSchoolMode] = useState("college");
-  const [gradingScale, setGradingScale] = useState("percent");
   const [showPaywall, setShowPaywall] = useState(false);
   const [currentView, setCurrentView] = useState("calculator");
-  const [hasPaid, setHasPaid] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
-  const calculateButtonRef = useRef(null);
 
   const progress = useMemo(() => {
     const namedCourses = courses.filter((course) => course.name.trim() !== "").length;
-    const creditsFilled = courses.filter((course) => course.name.trim() !== "" && course.credits !== "").length;
-    const gradesFilled = courses.filter((course) => course.name.trim() !== "" && course.score !== "").length;
+    const creditsFilled = courses.filter(
+      (course) => course.name.trim() !== "" && course.credits !== ""
+    ).length;
+    const gradesFilled = courses.filter(
+      (course) => course.name.trim() !== "" && course.score !== ""
+    ).length;
 
     return {
       hasCourses: namedCourses > 0,
@@ -492,6 +643,7 @@ export default function GradeCalculatorSite() {
   function handleSchoolModeChange(value) {
     const nextDefault = value === "highschool" ? "1" : "3";
     setSchoolMode(value);
+
     setCourses((current) =>
       current.map((course) => {
         if (course.credits === "4") {
@@ -532,10 +684,6 @@ export default function GradeCalculatorSite() {
     window.location.href = SAMPLE_PAYMENT_LINK;
   }
 
-  function handlePreviewResults() {
-    setCurrentView("results");
-  }
-
   function handleBackToCalculator() {
     setCurrentView("calculator");
   }
@@ -567,7 +715,6 @@ export default function GradeCalculatorSite() {
     }
 
     if (paid === "1") {
-      setHasPaid(true);
       setShowPaywall(false);
       setCurrentView("results");
     }
@@ -581,7 +728,7 @@ export default function GradeCalculatorSite() {
   if (currentView === "results") {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
           <ResultsPage
             totals={totals}
             courses={courses}
@@ -596,30 +743,33 @@ export default function GradeCalculatorSite() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900">
-      <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="grid gap-6"
+          className="grid gap-5 sm:gap-6"
         >
-          <Card className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur">
-            <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white md:p-10">
-              <div className="absolute right-6 top-6 hidden rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 md:block">
+          <Card className="overflow-hidden rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur sm:rounded-[2rem]">
+            <div className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6 text-white sm:p-8 lg:p-10">
+              <div className="absolute right-6 top-6 hidden rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 lg:block">
                 Trusted by students
               </div>
+
               <div className="relative z-10 max-w-3xl">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm font-medium text-white/90">
                   <GraduationCap className="h-4 w-4" />
                   GPA & Grade Calculator
                 </div>
-                <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+
+                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                   Calculate your GPA and class average.
                 </h1>
-                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 md:text-lg">
-                  Built for the U.S. school system. Add your course names, credits, and grade percentages,
-                  then calculate your overall academic average.
+
+                <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7 lg:text-lg">
+                  Built for the U.S. school system. Add your course names, credits, and grade percentages, then calculate your overall academic average.
                 </p>
+
                 <div className="mt-6 flex flex-wrap gap-3">
                   <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
                     Fast course entry
@@ -635,10 +785,10 @@ export default function GradeCalculatorSite() {
             </div>
           </Card>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-            <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl">
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+            <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
+              <CardHeader className="p-5 sm:p-6">
+                <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
                   <Calculator className="h-6 w-6" />
                   U.S. Grade Calculator
                 </CardTitle>
@@ -646,8 +796,9 @@ export default function GradeCalculatorSite() {
                   Add courses, input credits, and enter each percentage score.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid gap-4 md:grid-cols-[220px_1fr] md:items-end">
+
+              <CardContent className="space-y-6 px-5 pb-5 sm:px-6 sm:pb-6">
+                <div className="grid gap-4 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-end">
                   <div>
                     <Label>School system</Label>
                     <Select value={schoolMode} onValueChange={handleSchoolModeChange}>
@@ -660,8 +811,11 @@ export default function GradeCalculatorSite() {
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-                    {schoolMode === "highschool" ? "High School mode uses 1 credit per class by default." : "College mode uses 3 credits per course by default and a 4.0 GPA scale."}
+                    {schoolMode === "highschool"
+                      ? "High School mode uses 1 credit per class by default."
+                      : "College mode uses 3 credits per course by default and a 4.0 GPA scale."}
                   </div>
                 </div>
 
@@ -669,9 +823,9 @@ export default function GradeCalculatorSite() {
                   {courses.map((course) => (
                     <div
                       key={course.id}
-                      className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1.5fr_0.6fr_0.6fr_auto] md:items-end"
+                      className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5 md:grid-cols-2 xl:grid-cols-[1.5fr_0.6fr_0.6fr_auto] xl:items-end"
                     >
-                      <div>
+                      <div className="md:col-span-2 xl:col-span-1">
                         <Label>Course name</Label>
                         <CourseAutocomplete
                           inputId={`course-name-${course.id}`}
@@ -679,27 +833,29 @@ export default function GradeCalculatorSite() {
                           onChange={(value) => updateCourse(course.id, "name", value)}
                         />
                       </div>
+
                       <div>
                         <Label>{schoolMode === "highschool" ? "Credits (default 1)" : "Credits (default 3)"}</Label>
                         <Input
                           type="number"
                           value={course.credits}
                           onChange={(e) => updateCourse(course.id, "credits", e.target.value)}
-                          className="mt-2 rounded-xl bg-white"
+                          className="mt-2"
                         />
                       </div>
+
                       <div>
                         <Label>Grade (%)</Label>
                         <Input
                           type="number"
                           value={course.score}
                           onChange={(e) => updateCourse(course.id, "score", e.target.value)}
-                          className="mt-2 rounded-xl bg-white"
+                          className="mt-2"
                         />
                       </div>
+
                       <Button
-                        variant="outline"
-                        className="rounded-xl"
+                        className="h-[46px] rounded-xl xl:w-[46px] xl:px-0"
                         onClick={() => removeCourse(course.id)}
                         disabled={courses.length === 1}
                       >
@@ -709,8 +865,8 @@ export default function GradeCalculatorSite() {
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <div className="text-sm text-slate-600 bg-slate-50 rounded-xl px-4 py-3">
+                <div className="flex flex-col gap-3">
+                  <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
                     <span className={progress.hasCourses ? "font-medium text-slate-900" : "text-slate-400"}>
                       {progress.hasCourses ? "✓" : "○"} Courses added
                     </span>
@@ -723,27 +879,30 @@ export default function GradeCalculatorSite() {
                       {progress.hasGrades ? "✓" : "○"} GPA ready to calculate
                     </span>
                   </div>
-                  <Button onClick={addCourse} className="rounded-2xl">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add course
-                  </Button>
-                  <Button
-                    ref={calculateButtonRef}
-                    onClick={handleCalculateAverage}
-                    className="w-full rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:w-auto"
-                  >
-                    Calculate your GPA
-                  </Button>
+
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <Button onClick={addCourse} className="rounded-2xl">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add course
+                    </Button>
+
+                    <Button
+                      onClick={handleCalculateAverage}
+                      className="w-full rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/15 hover:-translate-y-0.5 hover:bg-slate-800 sm:w-auto"
+                    >
+                      Calculate your GPA
+                    </Button>
+                  </div>
                 </div>
 
-                {isCalculating && (
-                  <Mascot visible={true} />
-                )}
+                {isCalculating && <Mascot visible={true} />}
 
                 {isCalculating && (
-                  <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm text-center">
+                  <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-center shadow-sm">
                     <div className="text-lg font-semibold text-slate-900">Analyzing your grades...</div>
-                    <div className="mt-2 text-sm text-slate-600">Calculating GPA and weighted average</div>
+                    <div className="mt-2 text-sm text-slate-600">
+                      Calculating GPA and weighted average
+                    </div>
                   </div>
                 )}
 
@@ -754,39 +913,43 @@ export default function GradeCalculatorSite() {
                       To see your weighted GPA, final average percentage, and letter grade, you need to complete a one-time $0.99 payment.
                     </div>
                     <div className="mt-3 text-xs leading-5 text-slate-500">
-                      By continuing, users accept the <a href={legalLinks.terms} className="underline">Terms of Service</a> and <a href={legalLinks.privacy} className="underline">Privacy Policy</a>.
+                      By continuing, users accept the{" "}
+                      <a href={legalLinks.terms} className="underline">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href={legalLinks.privacy} className="underline">
+                        Privacy Policy
+                      </a>
+                      .
                     </div>
-                    <div className="flex flex-col gap-3 sm:flex-row">
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                       <Button className="rounded-2xl" onClick={handleUnlockResults}>
                         Unlock my GPA for $0.99
                       </Button>
-                      
                     </div>
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            <div className="grid gap-6">
-              <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-slate-900">
+            <div className="grid gap-5 xl:sticky xl:top-6">
+              <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
+                <CardHeader className="p-5 sm:p-6">
+                  <CardTitle className="text-lg font-semibold text-slate-900 sm:text-xl">
                     Your results will appear here
                   </CardTitle>
                   <CardDescription>
                     After you calculate your grades, your GPA, average percentage, and letter grade will appear here.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+
+                <CardContent className="space-y-4 px-5 pb-5 sm:px-6 sm:pb-6">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                     Your weighted GPA, percentage average, and letter grade update instantly from your inputs.
                   </div>
-                  <ResultCard
-                    title="Weighted GPA"
-                    value={totals.gpa}
-                    locked
-                    subtext="Based on a 4.0 GPA scale"
-                  />
+
+                  <ResultCard title="Weighted GPA" value={totals.gpa} locked subtext="Based on a 4.0 GPA scale" />
                   <ResultCard
                     title="Average Percentage"
                     value={`${totals.averagePercent}%`}
@@ -802,43 +965,14 @@ export default function GradeCalculatorSite() {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-[1.75rem] border border-slate-200/70 bg-white/90 shadow-xl backdrop-blur">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Info className="h-5 w-5" />
-                    Setup Notes
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm leading-6 text-slate-600">
-                  <p>
-                    Replace <code className="rounded bg-slate-100 px-1 py-0.5">SAMPLE_PAYMENT_LINK</code> with your real Stripe Payment Link.
-                  </p>
-                  <p>
-                    In Stripe, set a success URL that sends users back to this app with <code className="rounded bg-slate-100 px-1 py-0.5">?paid=1</code> at the end.
-                  </p>
-                  <p>
-                    Example success URL while testing locally: <code className="rounded bg-slate-100 px-1 py-0.5">http://localhost:5174/?paid=1</code>. After deployment, replace that with your real domain.
-                  </p>
-                  <p>
-                    For a real paid flow, the strongest version is still to verify the payment on a backend or serverless function before showing unlocked results.
-                  </p>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-slate-700">
-                    <div className="font-medium">Current input summary</div>
-                    <div className="mt-2 text-sm">Courses entered: {totals.classCount}</div>
-                    <div className="text-sm">Total credits: {totals.totalCredits}</div>
-                  </div>
-                  
-                </CardContent>
-              </Card>
-
               <Card id="terms-of-service" className="rounded-3xl border-0 shadow-lg">
-                <CardHeader>
+                <CardHeader className="p-5 sm:p-6">
                   <CardTitle>Terms of Service</CardTitle>
                   <CardDescription>
                     Short terms text you can keep on the site before going live.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm leading-6 text-slate-600">
+                <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
                   <p>This tool provides GPA estimates based only on the grades and credits entered by the user.</p>
                   <p>Results are informational only and may not match official school or college records.</p>
                   <p>Payments are one-time digital access fees and are non-refundable except where required by law.</p>
@@ -846,13 +980,13 @@ export default function GradeCalculatorSite() {
               </Card>
 
               <Card id="privacy-policy" className="rounded-3xl border-0 shadow-lg">
-                <CardHeader>
+                <CardHeader className="p-5 sm:p-6">
                   <CardTitle>Privacy Policy</CardTitle>
                   <CardDescription>
                     Basic privacy wording for a simple calculator with Stripe checkout.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm leading-6 text-slate-600">
+                <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
                   <p>We do not store personal information entered into the calculator unless you later add account or save features.</p>
                   <p>Payments are securely processed by Stripe, and payment details are handled by Stripe rather than this site.</p>
                   <p>You may also add analytics or cookie disclosures if you connect tracking tools before launch.</p>
