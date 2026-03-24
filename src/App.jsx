@@ -41,7 +41,9 @@ const Input = ({ className = "", ...props }) => (
   />
 );
 
-const Label = ({ children }) => <label className="text-sm font-medium text-slate-700">{children}</label>;
+const Label = ({ children }) => (
+  <label className="text-sm font-medium text-slate-700">{children}</label>
+);
 
 const Select = ({ value, onValueChange, children }) => (
   <select
@@ -161,7 +163,9 @@ function ResultCard({ title, value, locked = false, subtext = "" }) {
       {locked && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/70 backdrop-blur-sm">
           <Lock className="h-6 w-6 text-slate-700" />
-          <div className="text-center text-sm font-medium text-slate-700">Unlock to see your result</div>
+          <div className="text-center text-sm font-medium text-slate-700">
+            Unlock to see your result
+          </div>
         </div>
       )}
     </div>
@@ -189,7 +193,9 @@ function CourseAutocomplete({ value, onChange, inputId }) {
   const filteredSuggestions = useMemo(() => {
     const trimmed = value.trim().toLowerCase();
     if (!trimmed) return COURSE_SUGGESTIONS.slice(0, 8);
-    return COURSE_SUGGESTIONS.filter((course) => course.toLowerCase().includes(trimmed)).slice(0, 8);
+    return COURSE_SUGGESTIONS.filter((course) =>
+      course.toLowerCase().includes(trimmed)
+    ).slice(0, 8);
   }, [value]);
 
   return (
@@ -249,6 +255,7 @@ function buildCourseSummary(courses) {
       const credits = numberOrZero(course.credits);
       const letter = getLetter(numericScore);
       const points = GRADE_POINTS[letter] ?? 0;
+
       return {
         ...course,
         credits,
@@ -340,6 +347,7 @@ function downloadReportPdf({ totals, courses, schoolMode }) {
       </body>
     </html>
   `);
+
   reportWindow.document.close();
 }
 
@@ -359,17 +367,22 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
           <div className="absolute right-6 top-6 hidden rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 lg:block">
             Payment confirmed
           </div>
+
           <div className="max-w-3xl">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm font-medium text-white/90">
               <Sparkles className="h-4 w-4" />
               GPA Results
             </div>
+
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
               Your academic summary is ready.
             </h1>
+
             <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7 lg:text-lg">
-              Here is your finished GPA report with your weighted GPA, class average, detailed course breakdown, and printable PDF export.
+              Here is your finished GPA report with your weighted GPA, class average,
+              detailed course breakdown, and printable PDF export.
             </p>
+
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button
                 onClick={onDownloadPdf}
@@ -378,6 +391,7 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
                 <Download className="mr-2 h-4 w-4" />
                 Download PDF report
               </Button>
+
               <Button
                 onClick={onBack}
                 className="rounded-2xl border border-white/15 bg-white/10 text-white hover:bg-white/15 hover:-translate-y-0.5"
@@ -395,7 +409,9 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur">
               <div className="text-sm text-slate-500">Weighted GPA</div>
-              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">{totals.gpa}</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+                {totals.gpa}
+              </div>
               <div className="mt-2 text-sm text-slate-500">Based on a 4.0 GPA scale</div>
             </Card>
 
@@ -404,13 +420,19 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
               <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
                 {totals.averagePercent}%
               </div>
-              <div className="mt-2 text-sm text-slate-500">Credit-weighted course average</div>
+              <div className="mt-2 text-sm text-slate-500">
+                Credit-weighted course average
+              </div>
             </Card>
 
             <Card className="rounded-[1.5rem] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur sm:col-span-2 lg:col-span-1">
               <div className="text-sm text-slate-500">Final Letter Grade</div>
-              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">{totals.letterGrade}</div>
-              <div className="mt-2 text-sm text-slate-500">Estimated from your weighted average</div>
+              <div className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+                {totals.letterGrade}
+              </div>
+              <div className="mt-2 text-sm text-slate-500">
+                Estimated from your weighted average
+              </div>
             </Card>
           </div>
 
@@ -442,8 +464,13 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
                       </div>
                     ) : (
                       courseSummary.map((course) => (
-                        <div key={course.id} className="grid grid-cols-6 gap-2 px-4 py-4 text-sm text-slate-700">
-                          <div className="col-span-2 font-medium text-slate-900">{course.name}</div>
+                        <div
+                          key={course.id}
+                          className="grid grid-cols-6 gap-2 px-4 py-4 text-sm text-slate-700"
+                        >
+                          <div className="col-span-2 font-medium text-slate-900">
+                            {course.name}
+                          </div>
                           <div>{course.credits}</div>
                           <div>{course.numericScore.toFixed(2)}%</div>
                           <div>{course.letter}</div>
@@ -476,22 +503,30 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
                   <div className="inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-white/90">
                     GPA Report
                   </div>
-                  <div className="mt-3 text-xl font-bold sm:text-2xl">Your academic summary</div>
-                  <div className="mt-2 text-sm text-slate-300">Generated on {formatToday()}</div>
+                  <div className="mt-3 text-xl font-bold sm:text-2xl">
+                    Your academic summary
+                  </div>
+                  <div className="mt-2 text-sm text-slate-300">
+                    Generated on {formatToday()}
+                  </div>
                 </div>
 
                 <div className="grid gap-3 p-4 sm:p-5">
                   <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
                       <div className="text-xs text-slate-500">GPA</div>
-                      <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">{totals.gpa}</div>
+                      <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                        {totals.gpa}
+                      </div>
                     </div>
+
                     <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
                       <div className="text-xs text-slate-500">Average</div>
                       <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
                         {totals.averagePercent}%
                       </div>
                     </div>
+
                     <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
                       <div className="text-xs text-slate-500">Letter</div>
                       <div className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
@@ -536,7 +571,9 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
             <CardContent className="space-y-4 px-5 pb-5 text-sm text-slate-600 sm:px-6 sm:pb-6">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="font-medium text-slate-900">School system</div>
-                <div className="mt-1">{schoolMode === "highschool" ? "High School" : "College"}</div>
+                <div className="mt-1">
+                  {schoolMode === "highschool" ? "High School" : "College"}
+                </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -570,12 +607,15 @@ function ResultsPage({ totals, courses, schoolMode, onBack, onDownloadPdf }) {
 }
 
 export default function GradeCalculatorSite() {
-  const [courses, setCourses] = useState([{ id: 1, name: "English", credits: "3", score: "92" }]);
+  const [courses, setCourses] = useState([
+    { id: 1, name: "", credits: "3", score: "" },
+  ]);
   const [nextId, setNextId] = useState(2);
   const [schoolMode, setSchoolMode] = useState("college");
   const [showPaywall, setShowPaywall] = useState(false);
   const [currentView, setCurrentView] = useState("calculator");
   const [isCalculating, setIsCalculating] = useState(false);
+  const [hasPaidAccess, setHasPaidAccess] = useState(false);
 
   const progress = useMemo(() => {
     const namedCourses = courses.filter((course) => course.name.trim() !== "").length;
@@ -594,7 +634,10 @@ export default function GradeCalculatorSite() {
   }, [courses]);
 
   const totals = useMemo(() => {
-    const totalCredits = courses.reduce((sum, course) => sum + numberOrZero(course.credits), 0);
+    const totalCredits = courses.reduce(
+      (sum, course) => sum + numberOrZero(course.credits),
+      0
+    );
 
     const qualityPoints = courses.reduce((sum, course) => {
       const credits = numberOrZero(course.credits);
@@ -625,7 +668,9 @@ export default function GradeCalculatorSite() {
 
   function updateCourse(id, field, value) {
     setCourses((current) =>
-      current.map((course) => (course.id === id ? { ...course, [field]: value } : course))
+      current.map((course) =>
+        course.id === id ? { ...course, [field]: value } : course
+      )
     );
   }
 
@@ -649,7 +694,11 @@ export default function GradeCalculatorSite() {
           return course;
         }
 
-        if (course.credits === "1" || course.credits === "3" || course.credits === "") {
+        if (
+          course.credits === "1" ||
+          course.credits === "3" ||
+          course.credits === ""
+        ) {
           return { ...course, credits: nextDefault };
         }
 
@@ -668,7 +717,7 @@ export default function GradeCalculatorSite() {
     setTimeout(() => {
       setIsCalculating(false);
       setShowPaywall(true);
-    }, 900);
+    }, 1500);
   }
 
   function handleUnlockResults() {
@@ -677,18 +726,11 @@ export default function GradeCalculatorSite() {
       schoolMode,
       nextId,
       savedAt: Date.now(),
+      pendingCheckout: true,
     };
 
-    // Save calculator state so it can be restored after Stripe checkout
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState));
-
-    // Redirect to Stripe payment link
     window.location.href = SAMPLE_PAYMENT_LINK;
-  };
-
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState));
-    setShowPaywall(false);
-    setCurrentView("results");
   }
 
   function handleBackToCalculator() {
@@ -704,13 +746,20 @@ export default function GradeCalculatorSite() {
     const paid = params.get("paid");
 
     const savedStateRaw = window.localStorage.getItem(STORAGE_KEY);
+    let restoredState = null;
+
     if (savedStateRaw) {
       try {
         const savedState = JSON.parse(savedStateRaw);
+        restoredState = savedState;
+
         if (Array.isArray(savedState.courses) && savedState.courses.length > 0) {
           setCourses(savedState.courses);
         }
-        if (savedState.schoolMode === "highschool" || savedState.schoolMode === "college") {
+        if (
+          savedState.schoolMode === "highschool" ||
+          savedState.schoolMode === "college"
+        ) {
           setSchoolMode(savedState.schoolMode);
         }
         if (typeof savedState.nextId === "number") {
@@ -721,9 +770,24 @@ export default function GradeCalculatorSite() {
       }
     }
 
-    if (paid === "1") {
+    const validPaidReturn = paid === "1" && restoredState?.pendingCheckout;
+
+    if (validPaidReturn) {
+      const updatedState = {
+        ...restoredState,
+        pendingCheckout: false,
+        paidAccess: true,
+      };
+
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedState));
+      setHasPaidAccess(true);
       setShowPaywall(false);
       setCurrentView("results");
+      return;
+    }
+
+    if (restoredState?.paidAccess) {
+      setHasPaidAccess(true);
     }
   }, []);
 
@@ -732,7 +796,7 @@ export default function GradeCalculatorSite() {
     privacy: "#privacy-policy",
   };
 
-  if (currentView === "results") {
+  if (currentView === "results" && hasPaidAccess) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900">
         <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
@@ -774,7 +838,8 @@ export default function GradeCalculatorSite() {
                 </h1>
 
                 <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7 lg:text-lg">
-                  Built for the U.S. school system. Add your course names, credits, and grade percentages, then calculate your overall academic average.
+                  Built for the U.S. school system. Add your course names, credits, and
+                  grade percentages, then calculate your overall academic average.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -842,11 +907,17 @@ export default function GradeCalculatorSite() {
                       </div>
 
                       <div>
-                        <Label>{schoolMode === "highschool" ? "Credits (default 1)" : "Credits (default 3)"}</Label>
+                        <Label>
+                          {schoolMode === "highschool"
+                            ? "Credits (default 1)"
+                            : "Credits (default 3)"}
+                        </Label>
                         <Input
                           type="number"
                           value={course.credits}
-                          onChange={(e) => updateCourse(course.id, "credits", e.target.value)}
+                          onChange={(e) =>
+                            updateCourse(course.id, "credits", e.target.value)
+                          }
                           className="mt-2"
                         />
                       </div>
@@ -856,7 +927,9 @@ export default function GradeCalculatorSite() {
                         <Input
                           type="number"
                           value={course.score}
-                          onChange={(e) => updateCourse(course.id, "score", e.target.value)}
+                          onChange={(e) =>
+                            updateCourse(course.id, "score", e.target.value)
+                          }
                           className="mt-2"
                         />
                       </div>
@@ -874,15 +947,27 @@ export default function GradeCalculatorSite() {
 
                 <div className="flex flex-col gap-3">
                   <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <span className={progress.hasCourses ? "font-medium text-slate-900" : "text-slate-400"}>
+                    <span
+                      className={
+                        progress.hasCourses ? "font-medium text-slate-900" : "text-slate-400"
+                      }
+                    >
                       {progress.hasCourses ? "✓" : "○"} Courses added
                     </span>
                     <span className="mx-2 text-slate-300">•</span>
-                    <span className={progress.hasCredits ? "font-medium text-slate-900" : "text-slate-400"}>
+                    <span
+                      className={
+                        progress.hasCredits ? "font-medium text-slate-900" : "text-slate-400"
+                      }
+                    >
                       {progress.hasCredits ? "✓" : "○"} Credits counted
                     </span>
                     <span className="mx-2 text-slate-300">•</span>
-                    <span className={progress.hasGrades ? "font-medium text-slate-900" : "text-slate-400"}>
+                    <span
+                      className={
+                        progress.hasGrades ? "font-medium text-slate-900" : "text-slate-400"
+                      }
+                    >
                       {progress.hasGrades ? "✓" : "○"} GPA ready to calculate
                     </span>
                   </div>
@@ -906,7 +991,9 @@ export default function GradeCalculatorSite() {
 
                 {isCalculating && (
                   <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-center shadow-sm">
-                    <div className="text-lg font-semibold text-slate-900">Analyzing your grades...</div>
+                    <div className="text-lg font-semibold text-slate-900">
+                      Analyzing your grades...
+                    </div>
                     <div className="mt-2 text-sm text-slate-600">
                       Calculating GPA and weighted average
                     </div>
@@ -915,9 +1002,13 @@ export default function GradeCalculatorSite() {
 
                 {showPaywall && (
                   <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-lg">
-                    <div className="text-lg font-semibold text-slate-900">Get your exact GPA</div>
+                    <div className="text-lg font-semibold text-slate-900">
+                      Get your exact GPA
+                    </div>
+
                     <div className="mt-2 text-sm leading-6 text-slate-600">
-                      Unlock your exact weighted GPA, final letter grade, and downloadable PDF report with a one-time payment.
+                      Unlock your exact weighted GPA, final letter grade, and downloadable
+                      PDF report with a one-time payment.
                     </div>
 
                     <div className="mt-4 grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
@@ -927,7 +1018,13 @@ export default function GradeCalculatorSite() {
                     </div>
 
                     <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                      Your average percentage is already calculated from your inputs. Pay only to unlock the exact GPA, final letter grade, and PDF export.
+                      Your average percentage is already calculated from your inputs. Pay
+                      only to unlock the exact GPA, final letter grade, and PDF export.
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                      Extra access check enabled: results only open after a valid paid
+                      return and saved checkout state.
                     </div>
 
                     <div className="mt-4 text-xs leading-5 text-slate-500">
@@ -963,22 +1060,31 @@ export default function GradeCalculatorSite() {
                     Your results will appear here
                   </CardTitle>
                   <CardDescription>
-                    After you calculate your grades, your GPA, average percentage, and letter grade will appear here.
+                    After you calculate your grades, your GPA, average percentage, and
+                    letter grade will appear here.
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="space-y-4 px-5 pb-5 sm:px-6 sm:pb-6">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    Your average percentage updates instantly from your inputs. Unlock the exact GPA, final letter grade, and PDF report after checkout.
+                    Your average percentage updates instantly from your inputs. Unlock the
+                    exact GPA, final letter grade, and PDF report after checkout.
                   </div>
 
-                  <ResultCard title="Weighted GPA" value={totals.gpa} locked subtext="Based on a 4.0 GPA scale" />
+                  <ResultCard
+                    title="Weighted GPA"
+                    value={totals.gpa}
+                    locked
+                    subtext="Based on a 4.0 GPA scale"
+                  />
+
                   <ResultCard
                     title="Average Percentage"
                     value={`${totals.averagePercent}%`}
                     locked={false}
                     subtext="Credit-weighted class average"
                   />
+
                   <ResultCard
                     title="Final Letter Grade"
                     value={totals.letterGrade}
@@ -989,41 +1095,83 @@ export default function GradeCalculatorSite() {
               </Card>
 
               <div className="grid gap-5 lg:grid-cols-2 lg:col-span-2">
-              <Card id="terms-of-service" className="rounded-3xl border-0 shadow-lg">
-                <CardHeader className="p-5 sm:p-6">
-                  <CardTitle>Terms of Service</CardTitle>
-                  <CardDescription>
-                    Clear terms for using this GPA calculator and its paid features.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
-                  <p><span className="font-semibold text-slate-900">Last updated:</span> March 2026</p>
-                  <p>This website provides estimated GPA results based only on the courses, grades, and credits entered by the user.</p>
-                  <p>The results are for informational purposes only and may not match official school, college, or university records.</p>
-                  <p>This website is an independent tool and is not affiliated with or endorsed by any educational institution.</p>
-                  <p>Payments are one-time digital access fees processed securely by Stripe. Payments are final and non-refundable except where required by law.</p>
-                  <p>By using this website, you accept that you are responsible for how you use the calculator’s results.</p>
-                  <p>These terms may be updated from time to time. Continued use of the website means you accept any updated terms.</p>
-                </CardContent>
-              </Card>
+                <Card id="terms-of-service" className="rounded-3xl border-0 shadow-lg">
+                  <CardHeader className="p-5 sm:p-6">
+                    <CardTitle>Terms of Service</CardTitle>
+                    <CardDescription>
+                      Clear terms for using this GPA calculator and its paid features.
+                    </CardDescription>
+                  </CardHeader>
 
-              <Card id="privacy-policy" className="rounded-3xl border-0 shadow-lg">
-                <CardHeader className="p-5 sm:p-6">
-                  <CardTitle>Privacy Policy</CardTitle>
-                  <CardDescription>
-                    How information is handled when you use this calculator.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
-                  <p><span className="font-semibold text-slate-900">Last updated:</span> March 2026</p>
-                  <p>The course names, grades, and credits entered into this calculator are processed in your browser and are not stored by this website.</p>
-                  <p>This website does not collect personal information such as your name, address, or payment card details through the calculator itself.</p>
-                  <p>Payments are securely processed by Stripe. Payment information is handled by Stripe and not stored on this website.</p>
-                  <p>This website may use basic hosting, technical logs, or analytics tools to keep the service running and improve performance.</p>
-                  <p>This Privacy Policy may be updated from time to time. Continued use of the website means you accept any updated policy terms.</p>
-                </CardContent>
-              </Card>
-            </div>
+                  <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
+                    <p>
+                      <span className="font-semibold text-slate-900">Last updated:</span>{" "}
+                      March 2026
+                    </p>
+                    <p>
+                      This website provides estimated GPA results based only on the courses,
+                      grades, and credits entered by the user.
+                    </p>
+                    <p>
+                      The results are for informational purposes only and may not match
+                      official school, college, or university records.
+                    </p>
+                    <p>
+                      This website is an independent tool and is not affiliated with or
+                      endorsed by any educational institution.
+                    </p>
+                    <p>
+                      Payments are one-time digital access fees processed securely by
+                      Stripe. Payments are final and non-refundable except where required by
+                      law.
+                    </p>
+                    <p>
+                      By using this website, you accept that you are responsible for how
+                      you use the calculator’s results.
+                    </p>
+                    <p>
+                      These terms may be updated from time to time. Continued use of the
+                      website means you accept any updated terms.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card id="privacy-policy" className="rounded-3xl border-0 shadow-lg">
+                  <CardHeader className="p-5 sm:p-6">
+                    <CardTitle>Privacy Policy</CardTitle>
+                    <CardDescription>
+                      How information is handled when you use this calculator.
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
+                    <p>
+                      <span className="font-semibold text-slate-900">Last updated:</span>{" "}
+                      March 2026
+                    </p>
+                    <p>
+                      The course names, grades, and credits entered into this calculator
+                      are processed in your browser and are not stored by this website.
+                    </p>
+                    <p>
+                      This website does not collect personal information such as your name,
+                      address, or payment card details through the calculator itself.
+                    </p>
+                    <p>
+                      Payments are securely processed by Stripe. Payment information is
+                      handled by Stripe and not stored on this website.
+                    </p>
+                    <p>
+                      This website may use basic hosting, technical logs, or analytics
+                      tools to keep the service running and improve performance.
+                    </p>
+                    <p>
+                      This Privacy Policy may be updated from time to time. Continued use
+                      of the website means you accept any updated policy terms.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </motion.div>
