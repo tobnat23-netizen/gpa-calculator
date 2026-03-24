@@ -969,13 +969,17 @@ export default function GradeCalculatorSite() {
                 <CardHeader className="p-5 sm:p-6">
                   <CardTitle>Terms of Service</CardTitle>
                   <CardDescription>
-                    Short terms text you can keep on the site before going live.
+                    Clear terms for using this GPA calculator and its paid features.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
-                  <p>This tool provides GPA estimates based only on the grades and credits entered by the user.</p>
-                  <p>Results are informational only and may not match official school or college records.</p>
-                  <p>Payments are one-time digital access fees and are non-refundable except where required by law.</p>
+                  <p><span className="font-semibold text-slate-900">Last updated:</span> March 2026</p>
+                  <p>This website provides estimated GPA results based only on the courses, grades, and credits entered by the user.</p>
+                  <p>The results are for informational purposes only and may not match official school, college, or university records.</p>
+                  <p>This website is an independent tool and is not affiliated with or endorsed by any educational institution.</p>
+                  <p>Payments are one-time digital access fees processed securely by Stripe. Payments are final and non-refundable except where required by law.</p>
+                  <p>By using this website, you accept that you are responsible for how you use the calculator’s results.</p>
+                  <p>These terms may be updated from time to time. Continued use of the website means you accept any updated terms.</p>
                 </CardContent>
               </Card>
 
@@ -983,13 +987,16 @@ export default function GradeCalculatorSite() {
                 <CardHeader className="p-5 sm:p-6">
                   <CardTitle>Privacy Policy</CardTitle>
                   <CardDescription>
-                    Basic privacy wording for a simple calculator with Stripe checkout.
+                    How information is handled when you use this calculator.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3 px-5 pb-5 text-sm leading-6 text-slate-600 sm:px-6 sm:pb-6">
-                  <p>We do not store personal information entered into the calculator unless you later add account or save features.</p>
-                  <p>Payments are securely processed by Stripe, and payment details are handled by Stripe rather than this site.</p>
-                  <p>You may also add analytics or cookie disclosures if you connect tracking tools before launch.</p>
+                  <p><span className="font-semibold text-slate-900">Last updated:</span> March 2026</p>
+                  <p>The course names, grades, and credits entered into this calculator are processed in your browser and are not stored by this website.</p>
+                  <p>This website does not collect personal information such as your name, address, or payment card details through the calculator itself.</p>
+                  <p>Payments are securely processed by Stripe. Payment information is handled by Stripe and not stored on this website.</p>
+                  <p>This website may use basic hosting, technical logs, or analytics tools to keep the service running and improve performance.</p>
+                  <p>This Privacy Policy may be updated from time to time. Continued use of the website means you accept any updated policy terms.</p>
                 </CardContent>
               </Card>
             </div>
